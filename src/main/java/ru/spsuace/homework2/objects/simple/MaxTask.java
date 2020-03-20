@@ -44,10 +44,11 @@ public class MaxTask {
             return null;
         }
         int[] tempArr = array;
+        int tmp =0;
         for (int i = array.length - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
                 if (array[j] > array[j + 1]) {
-                    int tmp = tempArr[j];
+                    tmp = tempArr[j];
                     tempArr[j] = tempArr[j + 1];
                     tempArr[j + 1] = tmp;
                 }
