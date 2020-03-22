@@ -16,11 +16,11 @@ public class MaxTask {
         if (count > array.length) {
             return null;
         }
-        int[] tempArr = array;
+        int[] tempArr = Arrays.copyOf(array, array.length);
         Arrays.sort(tempArr);
         int endOfArray = tempArr.length - 1;
         int[] finalArray = new int[count];
-        for (int i = 0; i <= count - 1; i++) {
+        for (int i = 0; i < count; i++) {
             finalArray[i] = tempArr[endOfArray];
             endOfArray -= 1;
         }
@@ -37,29 +37,23 @@ public class MaxTask {
      */
 
     public static int[] getMaxArrayHard(int[] array, int count) {
-        if (count == 0) {
-            return new int[0];
-        }
         if (count > array.length) {
             return null;
         }
-        int[] tempArr = array;
-        int tmp = 0;
-        for (int i = array.length - 1; i > 0; i--) {
-            for (int j = 0; j < i; j++) {
-                if (array[j] > array[j + 1]) {
-                    tmp = tempArr[j];
-                    tempArr[j] = tempArr[j + 1];
-                    tempArr[j + 1] = tmp;
+        int[] newArray = new int[count];
+        int[] extraArray = Arrays.copyOf(array, array.length);
+        int elementNumb = 0;
+        for (int j = 0; j < count; j++) {
+            int var = Integer.MIN_VALUE;
+            for (int i = 0; i < extraArray.length; i++) {
+                if (extraArray[i] > var) {
+                    var = extraArray[i];
+                    elementNumb = i;
                 }
             }
+            newArray[j] = var;
+            extraArray[elementNumb] = Integer.MIN_VALUE;
         }
-        int endOfArray = tempArr.length - 1;
-        int[] finalArray = new int[count];
-        for (int i = 0; i <= count - 1; i++) {
-            finalArray[i] = tempArr[endOfArray];
-            endOfArray -= 1;
-        }
-        return finalArray;
+        return newArray;
     }
 }

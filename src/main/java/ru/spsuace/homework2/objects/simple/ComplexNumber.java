@@ -8,46 +8,59 @@ package ru.spsuace.homework2.objects.simple;
  */
 public class ComplexNumber {
 
-    private final double realHalf;
-    private final double imaginaryHalf;
+    private final double real;
+    private final double imaginary;
 
     public ComplexNumber(double realHalf, double imaginaryHalf) {
-        this.realHalf = realHalf;
-        this.imaginaryHalf = imaginaryHalf;
+        this.real = realHalf;
+        this.imaginary = imaginaryHalf;
     }
 
-    public double getRealHalf() {
-        return realHalf;
+    public double getReal() {
+        return real;
     }
 
-    public double getImaginaryHalf() {
-        return imaginaryHalf;
+    public double getImaginary() {
+        return imaginary;
     }
 
     public String toString() {
-
-        if (realHalf != 0) {
-            if (imaginaryHalf > 0) {
-                return realHalf + "+" + imaginaryHalf + "i";
-            } else if (imaginaryHalf == 0) {
-                return String.valueOf(realHalf);
-            } else if (imaginaryHalf < 0) {
-                return realHalf + "-" + Math.abs(imaginaryHalf) + "i";
+        if (real < 0) {
+            if (imaginary < 0) {
+                return real + String.valueOf(imaginary) + "i";
+            } else if (imaginary > 0) {
+                return "-" + real + "+" + imaginary + "i";
+            } else {
+                return String.valueOf(real);
+            }
+        } else if (real > 0) {
+            if (imaginary > 0) {
+                return real + "+" + imaginary + "i";
+            } else if (imaginary == 0) {
+                return String.valueOf(real);
+            } else {
+                return real + String.valueOf(imaginary) + "i";
             }
         } else {
-            if (imaginaryHalf > 0) {
-                return imaginaryHalf + "i";
-            } else if (imaginaryHalf == 0) {
+            if (imaginary > 0) {
+                return imaginary + "i";
+            } else if (imaginary < 0) {
+                return imaginary + "i";
+            } else {
                 return "0";
-            } else if (imaginaryHalf < 0) {
-                return "-" + Math.abs(imaginaryHalf) + "i";
             }
         }
-        return null;
     }
 
-    public static ComplexNumber complexMult(ComplexNumber complexNumber1, ComplexNumber complexNumber2) {
-        ComplexNumber complexMult = new ComplexNumber((complexNumber1.realHalf * complexNumber2.realHalf) - (complexNumber1.imaginaryHalf * complexNumber2.imaginaryHalf), (complexNumber1.realHalf * complexNumber2.imaginaryHalf) + (complexNumber1.imaginaryHalf * complexNumber2.realHalf));
-        return complexMult;
+    public static ComplexNumber complexMult(ComplexNumber numb1, ComplexNumber numb2) {
+        return new ComplexNumber((numb1.real * numb2.real) - (numb1.imaginary * numb2.imaginary), (numb1.real * numb2.imaginary) + (numb1.imaginary * numb2.real));
+    }
+
+    public boolean equals(Object o) {
+        return o != null && getClass() == o.getClass() && (Math.abs(this.real - ((ComplexNumber) o).real) == 0.00001 || Math.abs(this.imaginary - ((ComplexNumber) o).imaginary) == 0.00001);
+    }
+
+    public double vector() {
+        return Math.abs(Math.pow(real, 2) + Math.pow(imaginary, 2));
     }
 }
