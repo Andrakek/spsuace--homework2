@@ -57,7 +57,10 @@ public class ComplexNumber {
     }
 
     public boolean equals(Object o) {
-        return o != null && getClass() == o.getClass() && (Math.abs(this.real - ((ComplexNumber) o).real) == 0.00001 || Math.abs(this.imaginary - ((ComplexNumber) o).imaginary) == 0.00001);
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        return (Math.abs(this.real - ((ComplexNumber) o).real) == 1e-5 || Math.abs(this.imaginary - ((ComplexNumber) o).imaginary) == 1e-5);
     }
 
     public double vector() {
