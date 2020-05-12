@@ -159,7 +159,6 @@ public class DoubleLinkedList<T> implements Iterable<T> {
         return element.value;
     }
 
-
     /**
      * Надо реализовать свой итератор, который будет последовательно идти с первого по последний элемент
      * 3 балла
