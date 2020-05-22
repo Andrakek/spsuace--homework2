@@ -15,7 +15,7 @@ import java.util.Set;
  * containsValue, get, put, remove в качестве аргумента или возвращаемого значения.
  * Читайте документацию к методам (ctrl + Q) для понимания, что где возвращается.
  * Считаем, что null я вам не передю ни в качестве ключа, ни в качестве значения
- *
+ * <p>
  * Важный момент, вам не надо реализовывать мапу, вы должны использовать композицию.
  * Вы можете использовать любые коллекции, которые есть в java. Перечислю реализации основных типов коллекций:
  * List -> {@link java.util.ArrayList}
@@ -26,19 +26,19 @@ import java.util.Set;
  * Deque -> {@link java.util.ArrayDeque}
  * Для быстрого перехода в нужный класс или метод, просто зажмите ctrl и щелкните по нему мышкой, или просто щелкните
  * колесиком. Бывает удобно, когда нужно переходить из одной точки кода в другую
- *
+ * <p>
  * Помните, что по мапе тоже можно итерироваться
- *
- *         for (Map.Entry<K, V> entry : map.entrySet()) {
- *             entry.getKey();
- *             entry.getValue();
- *         }
- *
- *
+ * <p>
+ * for (Map.Entry<K, V> entry : map.entrySet()) {
+ * entry.getKey();
+ * entry.getValue();
+ * }
+ * <p>
+ * <p>
  * Полный балл за все: 7
+ *
  * @param <K> - тип ключа
  * @param <V> - тип значения
- *
  */
 public class PopularMap<K, V> implements Map<K, V> {
 
@@ -52,64 +52,97 @@ public class PopularMap<K, V> implements Map<K, V> {
         this.map = map;
     }
 
+    private final Map<K, Integer> keyPop = new HashMap<>();
+
+    private final Map<V, Integer> valuePop = new HashMap<>();
+
     @Override
     public int size() {
-        return 0;
+        return map.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return map.isEmpty();
+    }
+
+    private <T> void count(Object o, Map<T, Integer> popularity) {
+        int tmp = popularity.getOrDefault((T) o, 0);
+        popularity.put((T) o, ++tmp);
     }
 
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        count(key, keyPop);
+        return map.containsKey(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
-        return false;
+        count(value, valuePop);
+        return map.containsValue(value);
     }
 
     @Override
     public V get(Object key) {
-        return null;
+        V value = map.get(key);
+        count(key, keyPop);
+        count(value, valuePop);
+        return value;
     }
 
     @Override
     public V put(K key, V value) {
-        return null;
+        V putValue = map.put(key, value);
+        count(value, valuePop);
+        count(putValue, valuePop);
+        count(key, keyPop);
+        return putValue;
     }
 
     @Override
     public V remove(Object key) {
-        return null;
+        V value = map.remove(key);
+        count(key, keyPop);
+        count(value, valuePop);
+        return value;
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-        throw new UnsupportedOperationException("putAll");
+        map.putAll(m);
     }
 
     @Override
     public void clear() {
-
+        map.clear();
     }
 
     @Override
     public Set<K> keySet() {
-        return null;
+        return map.keySet();
     }
 
     @Override
     public Collection<V> values() {
-        return null;
+        return map.values();
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        return map.entrySet();
+    }
+
+    public <T> T getPopular(Map<T, Integer> popMap) {
+        int count = 0;
+        T popularObject = null;
+        for (Map.Entry<T, Integer> entry : popMap.entrySet()) {
+            if (entry.getValue() >= count) {
+                popularObject = entry.getKey();
+                count = entry.getValue();
+            }
+        }
+        return popularObject;
     }
 
     /**
@@ -117,16 +150,15 @@ public class PopularMap<K, V> implements Map<K, V> {
      * 1 балл
      */
     public K getPopularKey() {
-        return null;
+        return getPopular(keyPop);
     }
-
 
     /**
      * Возвращает количество использование ключа
      * 1 балла
      */
     public int getKeyPopularity(K key) {
-        return 0;
+        return keyPop.getOrDefault(key, 0);
     }
 
     /**
@@ -134,16 +166,16 @@ public class PopularMap<K, V> implements Map<K, V> {
      * 1 балл
      */
     public V getPopularValue() {
-        return null;
+        return getPopular(valuePop);
     }
 
     /**
      * Возвращает количество использований значений в методах: containsValue, get, put (учитывается 2 раза, если
      * старое значение и новое - одно и тоже), remove (считаем по старому значению).
-     *  1 балл
+     * 1 балл
      */
     public int getValuePopularity(V value) {
-        return 0;
+        return valuePop.getOrDefault(value, 0);
     }
 
     /**
